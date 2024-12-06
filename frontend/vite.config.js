@@ -12,7 +12,7 @@ export default defineConfig({
       "pages": ["./src/pages/*"],
       "assets":["./src/assets"],
       "layouts": ["./src/layouts/*"],
-      "redux": ["./src/redux/*"],
+      
       "helpers":["./src/helpers/*"],
       "routes":["./src/routes/*"],
       "configs":["./src/configs/*"]
