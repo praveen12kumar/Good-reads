@@ -1,14 +1,14 @@
 
 import './App.css'
-import Home from '@/pages/Home';
-import Footer from '@/components/footer/Footer';
+import MainRoutes from '@/routes/MainRoutes';
+
 function App() {
   
 
   return (
     <>
-    <Home/>
-    <Footer/>
+    <MainRoutes/>
+  
     
     </>
   )
