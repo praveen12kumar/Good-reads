@@ -1,6 +1,8 @@
 import Button from "@/components/atoms/button/Button"
-
+import { useNavigate } from "react-router-dom"
 function Home () {
+  const navigate = useNavigate();
+
   return (
     <div className="w-screen h-dvh relative">
       
@@ -13,8 +15,8 @@ function Home () {
             <p className="text-3xl font-subheading font-medium text-stone-600">Your personal library and <br /> social network for <br /> bookworms</p>
           </div>
           <div className="absolute bottom-16 md:bottom-40 lg:bottom-60 right-10 lg:right-40 flex items-center gap-10">
-            <Button text="register" classes="bg-sky-900 text-white hover:bg-sky-800 transition-colors duration-300 ease-in  "/>
-            <Button text="login" classes="bg-stone-700 text-white hover:bg-stone-600 transition-colors duration-300 ease-in  "/>
+            <Button text="register" classes="bg-sky-900 text-white hover:bg-sky-800 transition-colors duration-300 ease-in" onClickHandler={() => navigate('/signup')} />
+            <Button text="login" classes="bg-stone-700 text-white hover:bg-stone-600 transition-colors duration-300 ease-in" onClickHandler={() => navigate('/login')} />
           </div>
       </div>
 
