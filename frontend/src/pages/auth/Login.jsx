@@ -1,16 +1,45 @@
- import { useState } from "react";
+ import { useState, useRef } from "react";
  import Input from "@/components/atoms/input/Input";
  import { useNavigate } from "react-router-dom";
+ import validateEmail from "@/helpers/validateEmail";
+ import validatePassword from "@/helpers/validatePassword";
+
+
  function Login(){
     const navigate = useNavigate();
+
     const [loginForm, setLoginForm] = useState({
         email: '',
         password: '',
     });
 
+    const emailRef = useRef(null);
+    const passwordRef = useRef(null);
+
     const handleFormSubmit = (e) => {
         e.preventDefault();
+        handleInvalidEmail();
+        handleInvalidPassword();
+        console.log(loginForm);
     }
+
+    const handleInvalidEmail = () => {
+        if(!validateEmail(loginForm.email)) {
+            emailRef.current.setInValid();
+        }
+    }
+
+    const handleInvalidPassword = () => {
+        if(!validatePassword(loginForm.password)) {
+            passwordRef.current.setInValid();
+        }   
+    }
+
+    const onChangeHandler = (e) => {
+        const {id, value} = e.target;
+        setLoginForm({...loginForm, [id]:value});
+    }
+    
 
     return(
 
@@ -30,9 +59,11 @@
                             placeholder="Email"
                             value={loginForm.email}
                             classess={"w-full h-full"}
-                            onChange={(e) => setLoginForm({...loginForm, email: e.target.value})}  
-                            checkOnBlur={false}
-                            autoComplete="off"
+                            onChangeHand={(e) => setLoginForm({...loginForm, email: e.target.value})}  
+                            ref={emailRef}
+                            onChangeHandler={onChangeHandler}
+                            checkOnBlur={handleInvalidEmail}
+                           
                         />
                     </div>
 
@@ -42,10 +73,10 @@
                             type="password"
                             placeholder="Password"
                             value={loginForm.password}
+                            ref={passwordRef}
                             classess={"w-full h-full"}
-                            onChange={(e) => setLoginForm({...loginForm, password: e.target.value})}  
-                            checkOnBlur={false}
-                            autoComplete="off"
+                            onChangeHandler={onChangeHandler}  
+                            checkOnBlur={handleInvalidPassword}
                         />
                     </div>
 

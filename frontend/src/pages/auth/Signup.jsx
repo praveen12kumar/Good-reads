@@ -1,21 +1,54 @@
 import { useRef, useState } from "react";
 import Input from "@/components/atoms/input/Input";
 import { useNavigate } from "react-router-dom";
+import validateEmail from "@/helpers/validateEmail";
+import validatePassword from "@/helpers/validatePassword";
+
 
 function Signup(){
     const navigate = useNavigate();
+
     const [signupForm, setSignupForm] = useState({
         username: '',
         email: '',
         password: '',
     });
-
+    const usernameRef = useRef(null);
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
+        handleInvalidEmail();
+        handleInvalidPassword();
+        console.log(signupForm);
     }
+
+    const handleInvalidEmail = () => {
+        if(!validateEmail(signupForm.email)) {
+            emailRef.current.setInValid();
+        }
+    }
+
+    const handleInvalidPassword = () => {
+        if(!validatePassword(signupForm.password)) {
+            passwordRef.current.setInValid();
+        }   
+    }
+
+    const handleInvalidUsername = ()=>{
+        if(signupForm.username.length < 3){
+            usernameRef.current.setInValid();
+        }
+    }
+
+    const onChangeHandler = (e) => {
+        const {id, value} = e.target;
+        setSignupForm({...signupForm, [id]:value});
+    }
+
+    
+
 
 
     return (
@@ -33,10 +66,10 @@ function Signup(){
                                 type="text"
                                 placeholder="Username"
                                 value={signupForm.username}
-                                classes={"w-full h-full text-slate-800 font-para tracking-wide"}
-                                onChange={(e) => setSignupForm({...signupForm, username: e.target.value})}  
-                                checkOnBlur={false}
-                                autoComplete="off"
+                                classes={"w-full h-full"}
+                                ref={usernameRef}
+                                onChangeHandler={onChangeHandler}
+                                checkOnBlur={handleInvalidUsername}  
                             />
                         </div>
 
@@ -47,9 +80,9 @@ function Signup(){
                                 placeholder="Email"
                                 value={signupForm.email}
                                 classess={"w-full h-full"}
-                                onChange={(e) => setSignupForm({...signupForm, email: e.target.value})}  
-                                checkOnBlur={false}
-                                autoComplete="off"
+                                ref={emailRef}
+                                onChangeHandler={onChangeHandler}  
+                                checkOnBlur={handleInvalidEmail}
                             />
                         </div>
 
@@ -59,10 +92,10 @@ function Signup(){
                                 type="password"
                                 placeholder="Password"
                                 value={signupForm.password}
-                                classess={"w-full h-full"}
-                                onChange={(e) => setSignupForm({...signupForm, password: e.target.value})}  
-                                checkOnBlur={false}
-                                autoComplete="off"
+                                classess={"w-full h-full "}
+                                ref={passwordRef}
+                                onChangeHandler={onChangeHandler}  
+                                checkOnBlur={handleInvalidPassword}
                             />
                         </div>
 
