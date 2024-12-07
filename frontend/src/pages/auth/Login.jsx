@@ -3,11 +3,13 @@
  import { useNavigate } from "react-router-dom";
  import validateEmail from "@/helpers/validateEmail";
  import validatePassword from "@/helpers/validatePassword";
+ import { useDispatch } from "react-redux";
+ import { signin } from "@/redux/Slices/AuthSlice";
 
 
  function Login(){
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
     const [loginForm, setLoginForm] = useState({
         email: '',
         password: '',
@@ -16,11 +18,16 @@
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
         handleInvalidEmail();
         handleInvalidPassword();
-        console.log(loginForm);
+        const response = await dispatch(signin(loginForm));
+        if(response?.payload?.data && response?.payload?.success === true){
+            navigate('/');
+        }
+
+        resetForm();
     }
 
     const handleInvalidEmail = () => {
@@ -40,6 +47,13 @@
         setLoginForm({...loginForm, [id]:value});
     }
     
+
+    const resetForm = () => {
+        setLoginForm({
+            email: '',
+            password: '',
+        });
+    }
 
     return(
 

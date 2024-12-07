@@ -3,9 +3,12 @@ import Input from "@/components/atoms/input/Input";
 import { useNavigate } from "react-router-dom";
 import validateEmail from "@/helpers/validateEmail";
 import validatePassword from "@/helpers/validatePassword";
+import { useDispatch } from "react-redux";
+import { signup } from "@/redux/Slices/AuthSlice";
 
 
 function Signup(){
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [signupForm, setSignupForm] = useState({
@@ -17,11 +20,18 @@ function Signup(){
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async(e) => {
         e.preventDefault();
         handleInvalidEmail();
         handleInvalidPassword();
-        console.log(signupForm);
+
+        const response = await dispatch(signup(signupForm));
+        console.log(response);
+        if(response?.payload?.data){
+            navigate('/login');
+        }
+
+        resetForm();
     }
 
     const handleInvalidEmail = () => {
@@ -45,6 +55,14 @@ function Signup(){
     const onChangeHandler = (e) => {
         const {id, value} = e.target;
         setSignupForm({...signupForm, [id]:value});
+    }
+
+    const resetForm = () => {
+        setSignupForm({
+            username: '',
+            email: '',
+            password: '',
+        });
     }
 
     
