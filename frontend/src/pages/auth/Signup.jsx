@@ -1,15 +1,17 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Input from "@/components/atoms/input/Input";
 import { useNavigate } from "react-router-dom";
 import validateEmail from "@/helpers/validateEmail";
 import validatePassword from "@/helpers/validatePassword";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signup } from "@/redux/Slices/AuthSlice";
 
 
 function Signup(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const state = useSelector((state) => state.auth);
 
     const [signupForm, setSignupForm] = useState({
         username: '',
@@ -64,6 +66,12 @@ function Signup(){
             password: '',
         });
     }
+
+    useEffect(() => {  
+        if(state.isLoggedIn) {
+            navigate('/dashboard');
+        }
+     }, []);
 
     
 

@@ -1,13 +1,16 @@
- import { useState, useRef } from "react";
+ import { useState, useRef, useEffect } from "react";
+ import Layout from "@/layouts/Layout";
  import Input from "@/components/atoms/input/Input";
  import { useNavigate } from "react-router-dom";
  import validateEmail from "@/helpers/validateEmail";
  import validatePassword from "@/helpers/validatePassword";
- import { useDispatch } from "react-redux";
+ import { useDispatch, useSelector } from "react-redux";
  import { signin } from "@/redux/Slices/AuthSlice";
 
 
  function Login(){
+    const {isLoggedIn} = useSelector((state) => state.auth);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [loginForm, setLoginForm] = useState({
@@ -24,7 +27,7 @@
         handleInvalidPassword();
         const response = await dispatch(signin(loginForm));
         if(response?.payload?.data && response?.payload?.success === true){
-            navigate('/');
+            navigate('/dashboard');
         }
 
         resetForm();
@@ -55,8 +58,14 @@
         });
     }
 
-    return(
+    useEffect(()=>{
+        if(isLoggedIn) {
+            navigate('/dashboard');
+        }
+    },[])
 
+    return(
+       
         <div className="w-screen h-dvh relative">
         <div className="w-full h-full flex-center p-4">
             <div className="max-w-md w-full h-auto flex flex-col gap-8 items-center">
@@ -107,7 +116,9 @@
             </div>
         </div>
     
-    </div>
+        </div>
+       
+       
     )
 }
 
